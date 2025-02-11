@@ -103,6 +103,31 @@ enum List<T> {
 // 21.2
 use std::rc::Rc;
 
+// 21.3
+struct Dog {
+  name: String,
+  age: i8,
+}
+struct Cat {
+  lives: i8,
+}
+
+trait Pet {
+  fn talk(&self) -> String;
+}
+
+impl Pet for Dog {
+  fn talk(&self) -> String {
+    format!("Woof, my name is {}!", self.name)
+  }
+}
+
+impl Pet for Cat {
+  fn talk(&self) -> String {
+    String::from("Miau!")
+  }
+}
+
 pub fn run() {
   // 20.4
   println!("");
@@ -170,4 +195,17 @@ pub fn run() {
   println!("a: {a}");
   println!("b: {b}");
   println!("count: {}", Rc::strong_count(&a));
+
+  // 21.3
+  println!();
+  let pets: Vec<Box<dyn Pet>> = vec![
+    Box::new(Cat { lives: 7 }),
+    Box::new(Dog { name: "falah".into(), age: 4 }),
+  ];
+  for pet in pets {
+    println!("hi, {}", pet.talk());
+  }
+  println!("dog size: {}, cat size: {}", std::mem::size_of::<Dog>(), std::mem::size_of::<Cat>());
+  println!("&dog size: {}, &cat size: {}", std::mem::size_of::<&Dog>(), std::mem::size_of::<&Cat>());
+  println!("&dyn size: {}, box<dyn> size: {}", std::mem::size_of::<&dyn Pet>(), std::mem::size_of::<Box<dyn Pet>>());
 }
