@@ -1,0 +1,5 @@
+hello this is my dear diary
+im learning rust
+
+very nice to be able to write and read emojis!
+🦀🤎
