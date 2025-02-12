@@ -60,6 +60,11 @@ impl User {
   }
 }
 
+// 24.1
+fn left_most<'a>(p1: &'a Point, p2: &'a Point) -> &'a Point {
+  return if p1.0 < p2.0 { p1 } else { p2 };
+}
+
 pub fn run() {
   // 23.1
   let p1 = Point(2,3);
@@ -126,6 +131,13 @@ pub fn run() {
   // 23.5
   let bob = User::new(String::from("Bob"), 32, 155.2);
   println!("I'm {} and my age is {}", bob.name, bob.age);
+
+  // 24.1
+  println!();
+  let pp1 = Point(23,2);
+  let pp2 = Point(4, 2);
+  let pp3 = left_most(&pp1, &pp2);
+  println!("pp3: {pp3:?}");
 }
 
 // 23.5
