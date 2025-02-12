@@ -9,7 +9,7 @@ fn main() {
 
   // Day 2
   day2::morning::run();
-  day2::afternoon::run();
+  let _ = day2::afternoon::run();
 
   // Day 3
   day3::morning::run();
