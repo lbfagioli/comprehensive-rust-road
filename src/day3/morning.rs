@@ -240,17 +240,17 @@ pub fn run() {
 
   // 20.7
   println!("");
-  let a = Droppable { name: "a" };
+  let _a = Droppable { name: "a" };
   {
-    let b = Droppable { name: "b" };
+    let _b = Droppable { name: "b" };
     {
-      let c = Droppable { name: "c" };
-      let d = Droppable { name: "d" };
+      let _c = Droppable { name: "c" };
+      let _d = Droppable { name: "d" };
       println!("Exiting block B");
     }
     println!("Exiting block A");
   }
-  drop(a);
+  drop(_a);
   println!("");
 
   // 20.8
