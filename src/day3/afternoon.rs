@@ -86,6 +86,19 @@ fn find_nearest<'a>(points: &'a [Point], query: &Point) -> Option<&'a Point> {
   nearest.map(|(p, _)| p)
 }
 
+// 24.3
+#[derive(Debug)]
+enum HighlightColor {
+  Pink,
+  Yellow,
+}
+
+#[derive(Debug)]
+struct Highlight<'document> {
+  slice: &'document str,
+  color: HighlightColor,
+}
+
 pub fn run() {
   // 23.1
   let p1 = Point(2,3);
@@ -167,6 +180,14 @@ pub fn run() {
     find_nearest(points, &Point(0, 2))
   };
   println!("nearest: {:?}", nearest);
+
+  // 24.3
+  let doc: String = "The quick brown fox jumps over the lazy dog.".into();
+  let noun = Highlight { slice: &doc[16..19], color: HighlightColor::Yellow };
+  let verb = Highlight { slice: &doc[20..25], color: HighlightColor::Pink };
+  // drop(doc);
+  println!("{noun:?}");
+  println!("{verb:?}");
 }
 
 // 23.5
