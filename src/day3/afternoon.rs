@@ -65,6 +65,27 @@ fn left_most<'a>(p1: &'a Point, p2: &'a Point) -> &'a Point {
   return if p1.0 < p2.0 { p1 } else { p2 };
 }
 
+// 24.2
+fn cab_distance(p1: &Point, p2: &Point) -> i32 {
+  (p1.0 - p2.0).abs() + (p1.1 - p2.1).abs()
+}
+
+fn find_nearest<'a>(points: &'a [Point], query: &Point) -> Option<&'a Point> {
+  // find_nearest<'a, 'q>(points: &'a [Point], query: &'q Point) -> Option<&'q Point> wont compile for lying on return lifetime
+  let mut nearest = None;
+  for p in points {
+    if let Some((_, nearest_dist)) = nearest {
+      let dist = cab_distance(p, query);
+      if dist < nearest_dist {
+        nearest = Some((p, dist));
+      }
+    } else {
+      nearest = Some((p, cab_distance(p, query)));
+    };
+  }
+  nearest.map(|(p, _)| p)
+}
+
 pub fn run() {
   // 23.1
   let p1 = Point(2,3);
@@ -138,6 +159,14 @@ pub fn run() {
   let pp2 = Point(4, 2);
   let pp3 = left_most(&pp1, &pp2);
   println!("pp3: {pp3:?}");
+
+  // 24.2
+  let points = &[Point(1, 0), Point(1, 0), Point(-1, 0), Point(0, -1)];
+  let nearest = {
+    let _query = Point(0, 2);
+    find_nearest(points, &Point(0, 2))
+  };
+  println!("nearest: {:?}", nearest);
 }
 
 // 23.5
