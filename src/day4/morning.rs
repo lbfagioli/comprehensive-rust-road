@@ -1,11 +1,11 @@
 // 26.2
-struct SliceIterator<'s> {
-  slice: &'s [i32],
+struct SliceIterator<'s, T> {
+  slice: &'s [T],
   i: usize,
 }
 
-impl<'s> Iterator for SliceIterator<'s> {
-  type Item = &'s i32;
+impl<'s, T> Iterator for SliceIterator<'s, T> {
+  type Item = &'s T;
   fn next(&mut self) -> Option<Self::Item> {
     if self.i == self.slice.len() {
       None
