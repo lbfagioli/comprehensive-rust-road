@@ -148,6 +148,28 @@ mod bar {
   }
 }
 
+// 27.3
+mod outer {
+  fn private() {
+    println!("outer::private");
+  }
+
+  pub fn public() {
+    println!("outer::public");
+  }
+
+  pub mod inner {
+    fn private() {
+      println!("outer::inner::private");
+    }
+
+    pub fn public() {
+      println!("outer::inner::public");
+      super::private();
+    }
+  }
+}
+
 pub fn run() {
   println!("so 'day4' starts..");
 
@@ -193,4 +215,9 @@ pub fn run() {
   // 27.1
   foo::do_something();
   bar::do_something();
+
+  // 27.3
+  outer::public();
+  outer::inner::public();
+  // outer::inner::private(); // this won't compile as inner::priv is not pub despite inner mod being pub
 }
