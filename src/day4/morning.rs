@@ -17,6 +17,46 @@ impl<'s, T> Iterator for SliceIterator<'s, T> {
   }
 }
 
+// 26.5
+struct Grid {
+  x_coords: Vec<i32>,
+  y_coords: Vec<i32>,
+}
+
+impl IntoIterator for Grid {
+  type Item = (i32, i32);
+  type IntoIter = GridIter;
+  fn into_iter(self) -> GridIter {
+    GridIter { grid: self, i: 0, j: 0 }
+  }
+}
+
+struct GridIter {
+  grid: Grid,
+  i: usize,
+  j: usize,
+}
+
+impl Iterator for GridIter {
+  type Item = (i32, i32);
+
+  fn next(&mut self) -> Option<(i32, i32)> {
+    if self.i == self.grid.x_coords.len() {
+      self.i = 0;
+      self.j += 1;
+      if self.j == self.grid.y_coords.len() {
+        return None;
+      }
+    }
+
+    let next = Some((self.grid.x_coords[self.i], self.grid.y_coords[self.j]));
+    self.i += 1;
+
+    next
+
+  }
+}
+
 pub fn run() {
   println!("so 'day4' starts..");
 
@@ -41,4 +81,10 @@ pub fn run() {
   // let prime_squares = primes.into_iter().map(|elem| elem * elem).collect::<Vec<_>>();
   let prime_squares: Vec<_> = primes.into_iter().map(|elem| elem * elem).collect();
   println!("prime squares: {prime_squares:?}");
+
+  // 26.5
+  let grid = Grid { x_coords: vec![1, 3, 5, 7], y_coords: vec![2, 4, 6, 8] };
+  for elem in grid {
+    println!("coords = {elem:?}");
+  }
 }
