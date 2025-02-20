@@ -26,4 +26,19 @@ pub fn run() {
   for elem in iter {
     println!("{elem}");
   }
+
+  // 26.3
+  println!();
+  let result: i32 = (1..=10)
+    .filter(|x| x%2 == 0)
+    .map(|x| x*x)
+    .sum();
+  println!("sum of squared even nums up to 10: {result}");
+
+  // 26.4
+  println!();
+  let primes = vec![2, 3, 5, 7];
+  // let prime_squares = primes.into_iter().map(|elem| elem * elem).collect::<Vec<_>>();
+  let prime_squares: Vec<_> = primes.into_iter().map(|elem| elem * elem).collect();
+  println!("prime squares: {prime_squares:?}");
 }
