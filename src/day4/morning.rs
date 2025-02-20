@@ -135,6 +135,19 @@ fn test_degenerate_cases() {
   assert_eq!(offset_differences(1, empty), vec![]);
 }
 
+// 27.1
+mod foo {
+  pub fn do_something() {
+    println!("foo");
+  }
+}
+
+mod bar {
+  pub fn do_something() {
+    println!("bar");
+  }
+}
+
 pub fn run() {
   println!("so 'day4' starts..");
 
@@ -176,4 +189,8 @@ pub fn run() {
   for (x, y) in &grid_ref {
     println!("grid ref 2; x: {x}, y: {y}");
   }
+
+  // 27.1
+  foo::do_something();
+  bar::do_something();
 }
