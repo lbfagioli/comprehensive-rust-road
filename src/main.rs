@@ -1,6 +1,7 @@
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 fn main() {
   // Day 1
@@ -14,4 +15,7 @@ fn main() {
   // Day 3
   day3::morning::run();
   day3::afternoon::run();
+
+  // Day 4
+  day4::morning::run();
 }
