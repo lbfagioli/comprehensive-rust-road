@@ -30,6 +30,18 @@ impl IntoIterator for Grid {
     GridIter { grid: self, i: 0, j: 0 }
   }
 }
+struct GridRef {
+  x_coords: Vec<i32>,
+  y_coords: Vec<i32>,
+}
+
+impl<'a> IntoIterator for &'a GridRef {
+  type Item = (i32, i32);
+  type IntoIter = GridRefIter<'a>;
+  fn into_iter(self) -> GridRefIter<'a> {
+    GridRefIter { grid: self, i: 0, j: 0 }
+  }
+}
 
 struct GridIter {
   grid: Grid,
@@ -37,7 +49,33 @@ struct GridIter {
   j: usize,
 }
 
+struct GridRefIter<'a> {
+  grid: &'a GridRef,
+  i: usize,
+  j: usize,
+}
+
 impl Iterator for GridIter {
+  type Item = (i32, i32);
+
+  fn next(&mut self) -> Option<(i32, i32)> {
+    if self.i == self.grid.x_coords.len() {
+      self.i = 0;
+      self.j += 1;
+      if self.j == self.grid.y_coords.len() {
+        return None;
+      }
+    }
+
+    let next = Some((self.grid.x_coords[self.i], self.grid.y_coords[self.j]));
+    self.i += 1;
+
+    next
+
+  }
+}
+
+impl<'a> Iterator for GridRefIter<'a> {
   type Item = (i32, i32);
 
   fn next(&mut self) -> Option<(i32, i32)> {
@@ -86,5 +124,16 @@ pub fn run() {
   let grid = Grid { x_coords: vec![1, 3, 5, 7], y_coords: vec![2, 4, 6, 8] };
   for elem in grid {
     println!("coords = {elem:?}");
+  }
+  // this won't compile as grid got moved due to into_iter() taking ownership
+  // for elem in grid {
+  //   println!("coords2 = {elem:?}");
+  // }
+  let grid_ref = GridRef { x_coords: vec![1, 3, 5, 7], y_coords: vec![2, 4, 6, 8] };
+  for (x, y) in &grid_ref {
+    println!("grid ref 1; x: {x}, y: {y}");
+  }
+  for (x, y) in &grid_ref {
+    println!("grid ref 2; x: {x}, y: {y}");
   }
 }
