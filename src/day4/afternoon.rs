@@ -5,6 +5,16 @@ use std::panic;
 use std::fs::File;
 use std::io::Read;
 
+// 30.3
+fn read_username(path: &str) -> Result<String, std::io::Error> {
+  let mut username_file = File::open(path)?;
+
+  let mut username = String::new();
+  username_file.read_to_string(&mut username)?;
+  
+  Ok(username)
+}
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
@@ -32,4 +42,9 @@ pub fn run() {
     }
     Err(err) => println!("error reading file")
   }
+
+  // 30.3
+  // std::fs::write("config.dat", "alice").unwrap();
+  let username = read_username("config.dat");
+  println!("username or error: {username:?}");
 }
