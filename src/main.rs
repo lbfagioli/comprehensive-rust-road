@@ -18,4 +18,5 @@ fn main() {
 
   // Day 4
   day4::morning::run();
+  day4::afternoon::run();
 }
