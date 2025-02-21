@@ -170,6 +170,30 @@ mod outer {
   }
 }
 
+// 27.4
+use outer2::Foo;
+
+mod outer2 {
+  pub struct Foo {
+    pub val: i32,
+    is_big: bool,
+  }
+
+  impl Foo {
+    pub fn new(val: i32) -> Self {
+      Self { val, is_big: val > 100 }
+    }
+  }
+
+  pub mod inner {
+    use super::Foo;
+
+    pub fn print_foo(foo: &Foo) {
+      println!("is {} big? {}", foo.val, foo.is_big);
+    }
+  }
+}
+
 pub fn run() {
   println!("so 'day4' starts..");
 
@@ -196,6 +220,7 @@ pub fn run() {
   println!("prime squares: {prime_squares:?}");
 
   // 26.5
+  println!();
   let grid = Grid { x_coords: vec![1, 3, 5, 7], y_coords: vec![2, 4, 6, 8] };
   for elem in grid {
     println!("coords = {elem:?}");
@@ -213,11 +238,21 @@ pub fn run() {
   }
 
   // 27.1
+  println!();
   foo::do_something();
   bar::do_something();
 
   // 27.3
+  println!();
   outer::public();
   outer::inner::public();
   // outer::inner::private(); // this won't compile as inner::priv is not pub despite inner mod being pub
+
+  // 27.4
+  println!();
+  let foo = Foo::new(42);
+  // let foo2 = Foo { val: 34, is_big: true }; // compile error: is_big is private
+  outer2::inner::print_foo(&foo);
+  outer2::inner::print_foo(&foo);
+  // println!("is {} big? {}", foo.val, foo.is_big); // compile error: same as before
 }
