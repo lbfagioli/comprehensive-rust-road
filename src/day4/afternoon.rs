@@ -1,6 +1,10 @@
 // 30.1
 use std::panic;
 
+// 30.2
+use std::fs::File;
+use std::io::Read;
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
@@ -14,4 +18,18 @@ pub fn run() {
   });
   println!("result2: {result:?}");
   println!("keeps going despite panicking as unwind got caught");
+
+  // 30.2
+  let file: Result<File, std::io::Error> = File::open("diary.txt");
+  match file {
+    Ok(mut actual_file) => {
+      let mut contents = String::new();
+      if let Ok(bytes) = actual_file.read_to_string(&mut contents) {
+        println!("contents: {contents}, bytes: {bytes}");
+      } else {
+        println!("could not read file");
+      }
+    }
+    Err(err) => println!("error reading file")
+  }
 }
