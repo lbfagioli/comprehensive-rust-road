@@ -194,6 +194,12 @@ mod outer2 {
   }
 }
 
+// 27.6
+use super::widget::window::Window;
+use super::widget::label::Label;
+use super::widget::button::Button;
+use super::widget::widget::Widget;
+
 pub fn run() {
   println!("so 'day4' starts..");
 
@@ -255,4 +261,11 @@ pub fn run() {
   outer2::inner::print_foo(&foo);
   outer2::inner::print_foo(&foo);
   // println!("is {} big? {}", foo.val, foo.is_big); // compile error: same as before
+  println!();
+
+  // 27.6
+  let mut window = Window::new("Rust GUI Demo 1.23");
+  window.add_widget(Box::new(Label::new("This is a small text GUI demo.")));
+  window.add_widget(Box::new(Button::new("Click me!")));
+  window.draw();
 }
