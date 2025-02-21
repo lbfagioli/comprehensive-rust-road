@@ -200,6 +200,34 @@ use super::widget::label::Label;
 use super::widget::button::Button;
 use super::widget::widget::Widget;
 
+// 28.1
+fn first_word(string: &str) -> &str {
+  match string.find(" ") {
+    Some(index) => &string[..index],
+    None => &string
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn test_empty() {
+    assert_eq!(first_word(""), "");
+  }
+
+  #[test]
+  fn test_one_word() {
+    assert_eq!(first_word("hello"), "hello");
+  }
+
+  #[test]
+  fn test_multiple_words() {
+    assert_eq!(first_word("fine or not?"), "fine");
+  }
+}
+
 pub fn run() {
   println!("so 'day4' starts..");
 
