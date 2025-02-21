@@ -11,7 +11,41 @@ fn read_username(path: &str) -> Result<String, std::io::Error> {
 
   let mut username = String::new();
   username_file.read_to_string(&mut username)?;
-  
+
+  Ok(username)
+}
+
+// 30.4
+#[derive(Debug)]
+enum ReadUsernameError {
+  IoError(std::io::Error),
+  EmptyUsername(String),
+}
+
+impl std::error::Error for ReadUsernameError {}
+
+impl std::fmt::Display for ReadUsernameError {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    match self {
+      Self::IoError(e) => write!(f, "I/O err: {e}"),
+      Self::EmptyUsername(path) => write!(f, "Empty string in path {path}"),
+    }
+  }
+}
+
+impl From<std::io::Error> for ReadUsernameError {
+  fn from(err: std::io::Error) -> Self {
+    Self::IoError(err)
+  }
+}
+
+fn read_username2(path: &str) -> Result<String, ReadUsernameError> {
+  let mut username = String::with_capacity(100);
+  File::open(path)?.read_to_string(&mut username)?;
+  if username.is_empty() {
+    return Err(ReadUsernameError::EmptyUsername(String::from(path)));
+  }
+
   Ok(username)
 }
 
@@ -47,4 +81,9 @@ pub fn run() {
   // std::fs::write("config.dat", "alice").unwrap();
   let username = read_username("config.dat");
   println!("username or error: {username:?}");
+
+  // 30.4
+  // std::fs::write("config.dat", "").unwrap();
+  let username2 = read_username2("config.dat");
+  println!("username or error: {username2:?}");
 }
