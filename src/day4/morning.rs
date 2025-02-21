@@ -228,6 +228,8 @@ mod tests {
   }
 }
 
+// 28.3
+#[deny(clippy::cast_possible_truncation)]
 pub fn run() {
   println!("so 'day4' starts..");
 
@@ -296,4 +298,11 @@ pub fn run() {
   window.add_widget(Box::new(Label::new("This is a small text GUI demo.")));
   window.add_widget(Box::new(Button::new("Click me!")));
   window.draw();
+
+  // 28.3
+  let mut x = 3;
+  while (x < 700000) {
+    x *= 2;
+  }
+  println!("x should fit in u16: {}", x as u16);
 }
