@@ -49,6 +49,14 @@ fn read_username2(path: &str) -> Result<String, ReadUsernameError> {
   Ok(username)
 }
 
+// 30.5
+fn read_count(path: &str) -> Result<i32, Box<dyn std::error::Error>> { // must impl Error in custom errors to do this
+  let mut count_str = String::new();
+  File::open(path)?.read_to_string(&mut count_str)?;
+  let count: i32 = count_str.parse()?;
+  Ok(count)
+}
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
@@ -86,4 +94,11 @@ pub fn run() {
   // std::fs::write("config.dat", "").unwrap();
   let username2 = read_username2("config.dat");
   println!("username or error: {username2:?}");
+
+  // 30.5
+  std::fs::write("config.dat", "1i3").unwrap();
+  match read_count("config.dat") {
+    Ok(count) => println!("count is {count}"),
+    Err(error) => println!("got an error: {error}"),
+  }
 }
