@@ -57,6 +57,26 @@ fn read_count(path: &str) -> Result<i32, Box<dyn std::error::Error>> { // must i
   Ok(count)
 }
 
+// 30.6
+use thiserror::Error;
+
+#[derive(Debug, Error)]
+enum ReadUsernameError2 {
+  #[error("I/O error")]
+  IoError(#[from] std::io::Error),
+  #[error("Found no username in {0}")]
+  EmptyUsername(String),
+}
+
+fn read_username3(path: &str) -> Result<String, ReadUsernameError2> {
+  let mut username = String::with_capacity(100);
+  File::open(path)?.read_to_string(&mut username)?;
+  if username.is_empty() {
+    return Err(ReadUsernameError2::EmptyUsername(String::from(path)));
+  }
+  Ok(username)
+}
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
@@ -96,9 +116,14 @@ pub fn run() {
   println!("username or error: {username2:?}");
 
   // 30.5
-  std::fs::write("config.dat", "1i3").unwrap();
+  // std::fs::write("config.dat", "1i3").unwrap();
   match read_count("config.dat") {
     Ok(count) => println!("count is {count}"),
     Err(error) => println!("got an error: {error}"),
   }
+
+  // 30.6
+  // std::fs::write("config.dat", "").unwrap();
+  let username3 = read_username3("config.dat");
+  println!("username or error: {username3:?}");
 }
