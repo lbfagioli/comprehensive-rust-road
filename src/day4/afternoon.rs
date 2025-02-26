@@ -190,6 +190,14 @@ union MyUnion { // unions are almost never used, the book says it interacts well
   b: bool,
 }
 
+// 31.5.1
+// the function is unsafe as it requires arguments to be valid pointers
+unsafe fn swap(a: *mut u8, b: *mut u8) {
+  let temp_var = *a;
+  *a = *b;
+  *b = temp_var;
+}
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
@@ -283,4 +291,15 @@ pub fn run() {
   let my_union = MyUnion { i: 42 };
   println!("union int: {}", unsafe { my_union.i });
   println!("union bool: {}", unsafe { my_union.b });
+  println!();
+
+  // 31.5.1
+  let mut n1: u8 = 32;
+  let mut n2: u8 = 51;
+  // this unsafe function must be called into an unsafe block
+  // SAFETY: pointers come from references, satisfying validity required by this function
+  unsafe {
+    swap(&mut n1, &mut n2);
+  }
+  println!("n1: {}, n2: {}", n1, n2);
 }
