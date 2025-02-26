@@ -172,6 +172,17 @@ mod test {
   }
 }
 
+// 31.3
+static HELLO_WORLD: &str = "Hello world";
+
+static mut COUNTER: i32 = 0;
+
+fn add_to_counter(c: i32) {
+  unsafe {
+    COUNTER += c;
+  }
+}
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
@@ -251,4 +262,12 @@ pub fn run() {
   // let r3: &String = unsafe { &*r1 };
   // drop(s);
   // println!("r3 is {}", *r3);
+  println!();
+
+  // 31.3
+  println!("static var: {HELLO_WORLD}"); // safe static immnutable variable
+  add_to_counter(42); // this requires unsafe block even though this is a single thread process
+  unsafe {
+    println!("counter: {COUNTER}");
+  }
 }
