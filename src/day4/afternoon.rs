@@ -77,6 +77,25 @@ fn read_username3(path: &str) -> Result<String, ReadUsernameError2> {
   Ok(username)
 }
 
+// 30.7
+use anyhow::{bail, Context, Result};
+
+#[derive(Debug, Clone, Eq, Error, PartialEq)]
+#[error("Did not find an user in {0}")]
+struct EmptyUserError(String);
+
+fn read_username4(path: &str) -> Result<String> {
+  let mut username = String::with_capacity(100);
+  File::open(path)
+    .with_context(|| format!("failed to open {path}"))?
+    .read_to_string(&mut username)
+    .context("failed to read")?;
+  if username.is_empty() {
+    bail!(EmptyUserError(path.to_string()));
+  }
+  Ok(username)
+}
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
@@ -126,4 +145,11 @@ pub fn run() {
   // std::fs::write("config.dat", "").unwrap();
   let username3 = read_username3("config.dat");
   println!("username or error: {username3:?}");
+
+  // 30.7
+  // std::fs::write("config.dat", "").unwrap();
+  match read_username4("config.dat") {
+    Ok(username) => println!("user: {username}"),
+    Err(err) => println!("got err: {err}"),
+  }
 }
