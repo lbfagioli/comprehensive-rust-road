@@ -209,6 +209,21 @@ unsafe extern "C" {
   unsafe fn strlen(s: *const c_char) -> usize;
 }
 
+// 31.5.3
+struct KeyPair {
+  pk: [u16; 4], // 2 * 4 bytes = 8 bytes
+  sk: [u16; 4],
+}
+
+const PK_BYTE_LEN: usize = 8;
+
+// this is and unsound function, as it produces undefined behavior, but is safe
+// this fn should be marked as unsafe as pk_ptr should meet certain criteria (point to a 8 elements arr for this case)
+fn log_public_key(pk_ptr: *const u16) {
+  let pk: &[u16] = unsafe { std::slice::from_raw_parts(pk_ptr, PK_BYTE_LEN) }; // second arg is number of elems, not bytes, so this shows undefined behavior
+  println!("pk: {pk:?}");
+}
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
@@ -322,4 +337,9 @@ pub fn run() {
   unsafe {
     println!("strlen: {}", strlen(c"String".as_ptr()));
   }
+  println!();
+
+  // 31.5.3
+  let key_pair = KeyPair { pk: [3, 1, 3, 4], sk: [0, 0, 1, 2] };
+  log_public_key(key_pair.pk.as_ptr());
 }
