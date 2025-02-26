@@ -198,6 +198,17 @@ unsafe fn swap(a: *mut u8, b: *mut u8) {
   *b = temp_var;
 }
 
+// 31.5.2
+use std::ffi::c_char;
+
+unsafe extern "C" {
+  // abs doesn't have any safety requirement
+  safe fn abs(input: i32) -> i32;
+
+  // Safety: s must be a pointer to a NUL terminated C string, valid, not modified during this call
+  unsafe fn strlen(s: *const c_char) -> usize;
+}
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
@@ -302,4 +313,13 @@ pub fn run() {
     swap(&mut n1, &mut n2);
   }
   println!("n1: {}, n2: {}", n1, n2);
+  println!();
+
+  // 31.5.2
+  println!("abs of -5 according to C: {}", abs(-5));
+
+  // Safety: argument for strlen is a pointer to a c valid string
+  unsafe {
+    println!("strlen: {}", strlen(c"String".as_ptr()));
+  }
 }
