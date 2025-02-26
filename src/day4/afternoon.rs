@@ -183,6 +183,13 @@ fn add_to_counter(c: i32) {
   }
 }
 
+// 31.4
+#[repr(C)] // removing this didn't trigger a compiler error, so i don't know why it's here
+union MyUnion { // unions are almost never used, the book says it interacts well with C libs
+  i: u8,
+  b: bool,
+}
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
@@ -270,4 +277,10 @@ pub fn run() {
   unsafe {
     println!("counter: {COUNTER}");
   }
+  println!();
+
+  // 31.4
+  let my_union = MyUnion { i: 42 };
+  println!("union int: {}", unsafe { my_union.i });
+  println!("union bool: {}", unsafe { my_union.b });
 }
