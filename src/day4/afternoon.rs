@@ -224,6 +224,21 @@ fn log_public_key(pk_ptr: *const u16) {
   println!("pk: {pk:?}");
 }
 
+// 31.6
+use std::{mem, slice};
+
+// safety: type must have a defined representation and no padding
+pub unsafe trait IntoBytes {
+  fn as_bytes(&self) -> &[u8] {
+    let len = mem::size_of_val(self);
+    let slf: *const Self = self;
+    unsafe { slice::from_raw_parts(slf.cast::<u8>(), len) }
+  }
+}
+
+// safety: u32 meets requirements
+unsafe impl IntoBytes for u32 {}
+
 pub fn run() {
   println!("\nday4::afternoon::run");
 
