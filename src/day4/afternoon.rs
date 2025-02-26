@@ -185,6 +185,7 @@ pub fn run() {
   });
   println!("result2: {result:?}");
   println!("keeps going despite panicking as unwind got caught");
+  println!();
 
   // 30.2
   let file: Result<File, std::io::Error> = File::open("diary.txt");
@@ -199,16 +200,19 @@ pub fn run() {
     }
     Err(err) => println!("error reading file")
   }
+  println!();
 
   // 30.3
   // std::fs::write("config.dat", "alice").unwrap();
   let username = read_username("config.dat");
   println!("username or error: {username:?}");
+  println!();
 
   // 30.4
   // std::fs::write("config.dat", "").unwrap();
   let username2 = read_username2("config.dat");
   println!("username or error: {username2:?}");
+  println!();
 
   // 30.5
   // std::fs::write("config.dat", "1i3").unwrap();
@@ -216,11 +220,13 @@ pub fn run() {
     Ok(count) => println!("count is {count}"),
     Err(error) => println!("got an error: {error}"),
   }
+  println!();
 
   // 30.6
   // std::fs::write("config.dat", "").unwrap();
   let username3 = read_username3("config.dat");
   println!("username or error: {username3:?}");
+  println!();
 
   // 30.7
   // std::fs::write("config.dat", "").unwrap();
@@ -228,4 +234,21 @@ pub fn run() {
     Ok(username) => println!("user: {username}"),
     Err(err) => println!("got err: {err}"),
   }
+  println!();
+
+  // 31.2
+  let mut s = String::from("careful");
+  let r1 = &raw mut s;
+  let r2 = r1 as *const String;
+
+  unsafe {
+    println!("r1: {}", *r1);
+    *r1 = String::from("what could go wrong");
+    println!("r2: {}", *r2);
+  }
+
+  // should never do this (kinda obvious):
+  // let r3: &String = unsafe { &*r1 };
+  // drop(s);
+  // println!("r3 is {}", *r3);
 }
